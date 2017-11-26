@@ -1,0 +1,42 @@
+version: '2'
+services:
+
+  config:
+    build: config/.
+    image: fetta/foolsball-config
+    restart: always
+    ports:
+      - 8888:8888
+
+  registry:
+    build: registry/.
+    image: fetta/foolsball-registry
+    depends_on:
+      - "config"
+    restart: always
+    ports:
+      - 8761:8761
+
+#  gateway:
+#    build: gateway/.
+#    image: fetta/foolsball-gateway
+#    depends_on:
+#      - config
+#      - registry
+#    restart: always
+#    ports:
+#      - 4000:4000
+
+  postgres:
+    build: db-postgres/.
+    image: fetta/foolsball-postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+#  team-service:
+#    build: team-service/.
+#    image: fetta/foolsball-service-team
+#    restart: always
